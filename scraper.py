@@ -1,31 +1,29 @@
 '''
 https://papers.gceguide.com/A%20Levels/Physics%20(9702)/2017/9702_w17_ms_22.pdf
-the whole link consists of
+The whole link consists of
 1. the protocol + website
 2. the qualification (o or a level)
 3. the subject + subject code
-4. year
-5. filename
+4. the year
+5. the filename
 
-the filename consists of
+The filename consists of
 (subject code)_(summer or winter)(year)_(markscheme or question paper)_(paper number).pdf
 
-so the data input for an a level markscheme scraper are:
-1. subject (subject code can be hardcoded in)
+So, the data input for an A level markscheme scraper (though the qualification can change in a later time) are:
+1. subject (subject codes can be hardcoded in)
 2. the full year (eg: 2017)
-3. season (wether it was held during the summer, typically may-june or winter, typically oct-nov)
+3. season (wether it was held during the summer (typically may-june) or winter (typically oct-nov))
 4. paper number
-so far i will expect this to work for physics, i havent checked for other subjects as their file and link structures may be different
 
-https://papers.gceguide.com/A%20Levels/Physics%20(9702)/2008/9702_s08_ms_5.pdf
-https://papers.gceguide.com/A%20Levels/Physics%20(9702)/2021/9702_s21_ms_52.pdf
-https://papers.gceguide.com/A%20Levels/Physics%20(9702)/2015/9702_s15_ms_21.pdf
-from this data, we can conclude that the structure of the link does not change if the year changes drastically (for physics at least)
+https://papers.gceguide.com/A%20Levels/Physics%20(9702)/2017/9702_w17_ms_21.pdf
 https://papers.gceguide.com/A%20Levels/Biology%20(9700)/2009/9700_w09_ms_33.pdf
 https://papers.gceguide.com/A%20Levels/Mathematics%20(9709)/2016/9709_m16_ms_12.pdf
 https://papers.gceguide.com/A%20Levels/Mathematics%20(9709)/2018/9709_m18_ms_62.pdf
-this data tells us that the stucture remains consistent across different subjects
-though for maths the filename has to be dealt with seperately due to the paper number and the subject name being different
+This data tells us that the stucture remains consistent across different subjects
+Though for mathematics the filename has to be dealt with seperately due to the paper number and the subject name being different
+
+If for some reason your pdf viewer cannot open the file, chances are that page does not exist
 '''
 
 import os
@@ -80,8 +78,8 @@ def ConstructFilename(linkClass:LinkClass, subjectCodes:SubjectCodes) -> str:
 	code = subjectCodes.SubjectToCode(linkClass.subject)
 	year = str(linkClass.year[-2] + linkClass.year[-1])
 
-	if(not(linkClass.season == "s" or linkClass.season == "m")):
-		print("ConstructFilename(): Warning: unknown linkClass.season")
+	if(not(linkClass.season == "s" or linkClass.season == "w")):
+		print("ConstructFilename(): Warning: expected value of linkClass.season to be 's' or 'w', found " + linkClass.season)
 
 	return str(code + "_" + linkClass.season + year + "_ms_" + linkClass.paperNumber + ".pdf")
 
@@ -107,4 +105,6 @@ subjectCodes = SubjectCodes()
 
 DataInput(linkClass)
 link = AssembleLink(linkClass, subjectCodes)
-os.system("curl --output markscheme.pdf " + link)
+filename = ConstructFilename(linkClass, subjectCodes)
+print("Generated link: " + link)
+os.system("curl --output " + filename + " " + link)
