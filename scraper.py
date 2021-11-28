@@ -93,10 +93,10 @@ def AssembleLink(linkClass:LinkClass, subjectCodes:SubjectCodes) -> str:
 
 def DataInput(linkClass:LinkClass) -> None:
 	print("Enter subject(eg: Physics), full year(eg: 2017), season(eg: s or w), and 2 digit paper number(eg: 11)")
-	linkClass.subject = str(input())
-	linkClass.year = str(input())
-	linkClass.season = str(input())
-	linkClass.paperNumber = str(input())
+	linkClass.subject = str(input("Enter subject: "))
+	linkClass.year = str(input("Enter year: "))
+	linkClass.season = str(input("Enter season: "))
+	linkClass.paperNumber = str(input("Enter paper number: "))
 
 
 
